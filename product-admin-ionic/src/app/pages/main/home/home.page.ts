@@ -1,3 +1,4 @@
+import { AddUpdateProductComponent } from './../../../shared/components/add-update-product/add-update-product.component';
 import { Component, inject, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
@@ -19,4 +20,13 @@ export class HomePage implements OnInit {
   signOut(){
     this.fireBaseSvc.signOut();
   }
+
+  //======== Agregar o actualizar producto =========
+  addUpdateProduct(){ 
+    this.utilsSvc.presentModal({
+      component: AddUpdateProductComponent,
+      cssClass: 'add-update-modal'
+    });
+  }
+
 }

@@ -16,66 +16,66 @@ export class SignUpPage implements OnInit {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
     name: new FormControl('', [Validators.required])
-})
+  })
 
-fireBaseSvc = inject(FirebaseService);
-utilsSvc = inject(UtilsService);
-ngOnInit() {
-}
-
-async submit(){
-  if(this.form.valid){
-
-    const loading = await this.utilsSvc.loading();
-    await loading.present();
-    
-    this.fireBaseSvc.signUp(this.form.value as User)
-    .then(async res => {
-      let uid = res.user.uid;
-      this.form.controls.uid.setValue(uid);
-      this.setUserInfo(uid);
-      await this.fireBaseSvc.updateUser(this.form.value.name);
-    })
-    .catch(err => {
-      this.utilsSvc.presentToast({
-        message: 'Error al registrarte,correo ya existe',
-        duration: 2500,
-        position: 'middle',
-        icon: 'alert-circle-outline',
-        color: 'danger'
-      });
-    
-    })
-    .finally(() => loading.dismiss());
+  fireBaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
+  ngOnInit() {
   }
-}
 
-async setUserInfo(uid:string){
-  if(this.form.valid){
+  async submit() {
+    if (this.form.valid) {
 
-    const loading = await this.utilsSvc.loading();
-    await loading.present();
+      const loading = await this.utilsSvc.loading();
+      await loading.present();
 
-   
-    let path = `users/${uid}`;
-    delete this.form.value.password;
+      this.fireBaseSvc.signUp(this.form.value as User)
+        .then(async res => {
+          let uid = res.user.uid;
+          this.form.controls.uid.setValue(uid);
+          this.setUserInfo(uid);
+          await this.fireBaseSvc.updateUser(this.form.value.name);
+        })
+        .catch(err => {
+          this.utilsSvc.presentToast({
+            message: 'Error al registrarte,correo ya existe',
+            duration: 2500,
+            position: 'middle',
+            icon: 'alert-circle-outline',
+            color: 'danger'
+          });
 
-    this.fireBaseSvc.setDocument(path,this.form.value).then(res => {
-      this.utilsSvc.setLocalStorage('user',this.form.value);
-      this.utilsSvc.routerLink('/main/home');
-    })
-    .catch(err => {
-      this.utilsSvc.presentToast({
-        message: 'Error al guardar en la base de datos',
-        duration: 2500,
-        position: 'middle',
-        icon: 'alert-circle-outline',
-        color: 'danger'
-      });
-    
-    })
-    .finally(() => loading.dismiss());
+        })
+        .finally(() => loading.dismiss());
+    }
   }
-}
+
+  async setUserInfo(uid: string) {
+    if (this.form.valid) {
+
+      const loading = await this.utilsSvc.loading();
+      await loading.present();
+
+
+      let path = `users/${uid}`;
+      delete this.form.value.password;
+
+      this.fireBaseSvc.setDocument(path, this.form.value).then(res => {
+        this.utilsSvc.setLocalStorage('user', this.form.value);
+        this.utilsSvc.routerLink('/main/home');
+      })
+        .catch(err => {
+          this.utilsSvc.presentToast({
+            message: 'Error al guardar en la base de datos',
+            duration: 2500,
+            position: 'middle',
+            icon: 'alert-circle-outline',
+            color: 'danger'
+          });
+
+        })
+        .finally(() => loading.dismiss());
+    }
+  }
 
 }
