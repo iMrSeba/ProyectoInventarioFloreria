@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import {getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,updateProfile} from 'firebase/auth';
-import {User} from '../models/user.model';
-import {AngularFirestore} from '@angular/fire/compat/firestore';
-import {getFirestore,doc,setDoc,getDoc} from '@angular/fire/firestore';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
+import { User } from '../models/user.model';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { getFirestore, doc, setDoc, getDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -19,29 +19,33 @@ export class FirebaseService {
 
 
   //=========Acceder=========================
-  signIn(user:User){
+  signIn(user: User) {
     return signInWithEmailAndPassword(getAuth(), user.email, user.password);
   }
 
   //=========Acceder=========================
-  signUp(user:User){
+  signUp(user: User) {
     return createUserWithEmailAndPassword(getAuth(), user.email, user.password);
   }
 
   //=========Actualizar Perfil=========================
-  updateUser(displayName:string){
+  updateUser(displayName: string) {
     return updateProfile(getAuth().currentUser, {
       displayName
     });
   }
+  //=========Recuperar Contraseña=========================
+  resetPassword(email: string) {
+    return sendPasswordResetEmail(getAuth(), email);
+  }
 
   //Base de datos
-  
-  setDocument(path:string, data: any){
+
+  setDocument(path: string, data: any) {
     return setDoc(doc(getFirestore(), path), data);
   }
 
-  async getDocument(path:string){
+  async getDocument(path: string) {
     return (await getDoc(doc(getFirestore(), path))).data();
   }
 }
