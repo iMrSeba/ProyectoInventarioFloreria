@@ -55,4 +55,58 @@ export class HomePage implements OnInit {
     if(success) this.getProducts();
   }
 
+  async confirmDeleteProduct(product:Product){ {
+      this.utilsSvc.presentAlert({
+        header: 'Eliminar Producto',
+        message: '¿Estas seguro de eliminar este producto?',
+        buttons: [
+          {
+            text: 'Cancel',
+          }, {
+            text: 'si, eliminar',
+            handler: () => {
+              this.deleteProduct(product)
+            }
+          }
+        ]
+      });
+    }
+  }
+
+   //Actualizar Producto
+   async deleteProduct(product:Product){
+      
+    let path = `users/${this.user().uid}/products/${product.id}`;
+
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+    let imagePath = await this.fireBaseSvc.getFilePath(product.image);
+    await this.fireBaseSvc.deleteImage(imagePath)
+
+    this.fireBaseSvc.deleteDocument(path)
+      .then(async res => {
+
+        this.products = this.products.filter(p => p.id !== product.id);
+
+        this.utilsSvc.presentToast({
+          message: 'Producto Eliminado Correctamente',
+          duration: 1500,
+          position: 'middle',
+          icon: 'checkmark-circle-outline',
+          color: 'succes'
+        });
+      })
+      .catch(err => {
+        this.utilsSvc.presentToast({
+          message: 'Error al eliminar el producto',
+          duration: 1500,
+          position: 'middle',
+          icon: 'alert-circle-outline',
+          color: 'danger'
+        });
+
+      })
+      .finally(() => loading.dismiss());
+    }
 }
