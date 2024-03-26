@@ -7,6 +7,9 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
   providedIn: 'root'
 })
 export class UtilsService {
+  getFromLocalStorage(arg0: string): import("src/app/models/user.model").User {
+    throw new Error('Method not implemented.');
+  }
 
   loadingCtrl = inject(LoadingController);
   toastCtrl = inject(ToastController);
@@ -59,13 +62,15 @@ export class UtilsService {
   //=================== Modal ===================
   async presentModal(otps: ModalOptions) {
     const modal = await this.modalCtrl.create(otps);
-    return await modal.present();
+    await modal.present();
 
     const { data } = await modal.onWillDismiss();
     if (data) {
       return data;
+    } else {
+      return null; // Devuelve null si no hay datos
     }
-  }
+}
 
   dismissModal(data?: any) {
     this.modalCtrl.dismiss(data);
