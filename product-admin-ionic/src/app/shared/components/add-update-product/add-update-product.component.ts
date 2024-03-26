@@ -38,13 +38,19 @@ export class AddUpdateProductComponent  implements OnInit {
     this.form.controls.image.setValue(image);
   }
 
+  setNumberInputs(){
+    let {sell, stock,price} = this.form.controls;
+
+    if (sell.value) sell.setValue(parseFloat(sell.value));
+    if (stock.value) stock.setValue(parseFloat(stock.value));
+    if (price.value) price.setValue(parseFloat(price.value));
+  }
 
   submit() {
     if (this.form.valid) {
       if(this.product) this.UpdateProduct(); 
       else this.CreateProduct();
     } 
-    
   }
 
   //Crear producto

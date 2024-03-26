@@ -4,7 +4,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
-
+import {orderBy} from 'firebase/firestore';
+import { SellUpdateProductComponent } from 'src/app/shared/components/sell-update-product/sell-update-product.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -15,6 +16,8 @@ export class HomePage implements OnInit {
   fireBaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
   products:Product[] = [];
+
+  loading:boolean = false;
 
   ngOnInit() {
   }
@@ -29,9 +32,20 @@ export class HomePage implements OnInit {
 
   getProducts(){
     let path = `users/${this.user().uid}/products`;
-    let sub = this.fireBaseSvc.getCollectionData(path).subscribe({
+
+    this.loading = true;
+
+    let query = {
+      orderBy: 'sell',
+      order: 'desc'
+    };
+
+    let sub = this.fireBaseSvc.getCollectionData(path,query).subscribe({
       next: (res:any) => {
         this.products = res;
+
+        this.loading = false;
+
         sub.unsubscribe();
       }
     });
@@ -59,6 +73,7 @@ export class HomePage implements OnInit {
       this.utilsSvc.presentAlert({
         header: 'Eliminar Producto',
         message: '¿Estas seguro de eliminar este producto?',
+        mode: 'ios',
         buttons: [
           {
             text: 'Cancel',
@@ -73,7 +88,7 @@ export class HomePage implements OnInit {
     }
   }
 
-   //Actualizar Producto
+   //Eliminar Producto
    async deleteProduct(product:Product){
       
     let path = `users/${this.user().uid}/products/${product.id}`;
@@ -108,5 +123,18 @@ export class HomePage implements OnInit {
 
       })
       .finally(() => loading.dismiss());
+    }
+
+    //vender Producto
+    async sellProduct(product?:Product){ 
+      let success = await this.utilsSvc.presentModal({
+        component: SellUpdateProductComponent,
+        cssClass: 'add-update-modal',
+        componentProps: {
+          product
+        }
+      });
+  
+      if(success) this.getProducts();
     }
 }
