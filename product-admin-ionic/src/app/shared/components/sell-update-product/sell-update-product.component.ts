@@ -36,12 +36,12 @@ export class SellUpdateProductComponent  implements OnInit {
   }
 
   submit(){
-    if (this.form.valid){
-      this.UpdateProduct();
+    if (this.form.valid && this.form.value.sell <= this.product.stock){
+          this.UpdateProduct();
     }
     else{
       this.utilsSvc.presentToast({
-        message: 'Ingrese cantidad vendida',
+        message: 'Ingrese cantidad vendida o stock insuficiente',
         duration: 1500,
         position: 'middle',
         icon: 'alert-circle-outline',

@@ -24,8 +24,6 @@ export class AuthPage implements OnInit {
   async submit(){
     if(this.form.valid){
 
-      const loading = await this.utilsSvc.loading();
-      await loading.present();
       
       this.fireBaseSvc.signIn(this.form.value as User)
       .then(res => {
@@ -41,7 +39,6 @@ export class AuthPage implements OnInit {
         });
       
       })
-      .finally(() => loading.dismiss());
     }
   }
 

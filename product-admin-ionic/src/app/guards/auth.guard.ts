@@ -21,12 +21,12 @@ export class AuthGuard implements CanActivate {
       let user = localStorage.getItem('user');
       
       return new Promise((resolve) => {
-        this.firebaseSvc.getAuth().onAuthStateChanged((user) => {
-          if (user) {
-            resolve(true);
+        this.firebaseSvc.getAuth().onAuthStateChanged((auth) => {
+          if (auth) {
+            if (user) resolve(true);
           }
           else {
-            this.UtilsSvc.routerLink('/auth');
+            this.firebaseSvc.signOut();
             resolve(false);
           }
         });

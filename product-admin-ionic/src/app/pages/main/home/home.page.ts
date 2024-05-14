@@ -22,22 +22,31 @@ export class HomePage implements OnInit {
   ngOnInit() {
   }
 
+  doRefresh(event){
+    setTimeout(() => {
+      this.getProducts();
+      event.target.complete();
+    }, 1000);
+  }
+
+  ionViewWillEnter(){
+    
+      this.getProducts();
+  
+    
+  }
   user():User{
     return this.utilsSvc.getLocalStorage('user');
   }
 
-  ionViewWillEnter(){
-    this.getProducts();
-  }
-
   getProducts(){
     let path = `users/${this.user().uid}/products`;
-
+    console.log(this.user().uid)
     this.loading = true;
 
     let query = {
       orderBy: 'sell',
-      order: 'desc'
+      order: 'desc',
     };
 
     let sub = this.fireBaseSvc.getCollectionData(path,query).subscribe({
@@ -51,9 +60,8 @@ export class HomePage implements OnInit {
     });
   }
 
-  //Cerrar sesion
-  signOut(){
-    this.fireBaseSvc.signOut();
+  getProfits(){
+    return this.products.reduce((index,product) => index + product.price * product.sell,0);
   }
 
   //======== Agregar o actualizar producto =========

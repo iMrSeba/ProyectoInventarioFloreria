@@ -65,6 +65,12 @@ export class UtilsService {
     return JSON.parse(localStorage.getItem(key));
   }
 
+
+  //=====================Delete local storage====================
+  deleteLocalStorage(key: string) {
+    localStorage.removeItem(key);
+  }
+  
   //=================== Modal ===================
   async presentModal(otps: ModalOptions) {
     const modal = await this.modalCtrl.create(otps);
