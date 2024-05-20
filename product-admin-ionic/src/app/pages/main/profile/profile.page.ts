@@ -25,11 +25,39 @@ export class ProfilePage implements OnInit {
   async takeImage() {
 
     let user = this.user();
-    
+    let path = `users/${user.uid}`;
+
     const dataUrl = (await this.utilsSvc.takePicture('Imagen del Perfil')).dataUrl;
 
-    let imagePath = `${user.uid}/${Date.now()}`;
-    let imageUrl = await this.fireBaseSvc.uploadImage(imagePath,dataUrl);
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+    
+    let imagePath = `${user.uid}/profile`;
+    user.image = await this.fireBaseSvc.uploadImage(imagePath,dataUrl);
+
+    this.fireBaseSvc.updateDocument(path,{image: user.image})
+        .then(async res => {
+
+          this.utilsSvc.setLocalStorage('user',user);
+          this.utilsSvc.presentToast({
+            message: 'Imagen Actualizada Correctamente',
+            duration: 1500,
+            position: 'middle',
+            icon: 'checkmark-circle-outline',
+            color: 'succes'
+          });
+        })
+        .catch(err => {
+          this.utilsSvc.presentToast({
+            message: 'Error al actualizar la imagen',
+            duration: 1500,
+            position: 'middle',
+            icon: 'alert-circle-outline',
+            color: 'danger'
+          });
+
+        })
+        .finally(() => loading.dismiss());
   }
 
 
