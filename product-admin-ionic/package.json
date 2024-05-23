@@ -4,13 +4,13 @@
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "lint": "ng lint"
-  },
+    "ng": "npx ng",
+    "start": "npx ng serve",
+    "build": "npx ng build",
+    "watch": "npx ng build --watch --configuration development",
+    "test": "npx ng test",
+    "lint": "npx ng lint"
+  },  
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.0.2",
@@ -22,7 +22,7 @@
     "@angular/platform-browser": "^17.0.2",
     "@angular/platform-browser-dynamic": "^17.0.2",
     "@angular/router": "^17.0.2",
-    "@capacitor/android": "^5.7.4",
+    "@capacitor/android": "^5.7.5",
     "@capacitor/app": "5.0.7",
     "@capacitor/camera": "^5.0.9",
     "@capacitor/core": "5.7.4",
@@ -45,7 +45,7 @@
     "@angular-eslint/eslint-plugin-template": "^17.0.0",
     "@angular-eslint/schematics": "^17.0.0",
     "@angular-eslint/template-parser": "^17.0.0",
-    "@angular/cli": "^17.0.0",
+    "@angular/cli": "^17.3.8",
     "@angular/compiler-cli": "^17.0.2",
     "@angular/language-service": "^17.0.2",
     "@capacitor/cli": "5.7.4",

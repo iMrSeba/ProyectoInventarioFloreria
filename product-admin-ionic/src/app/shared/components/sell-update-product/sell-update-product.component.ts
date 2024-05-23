@@ -53,7 +53,7 @@ export class SellUpdateProductComponent  implements OnInit {
   //Actualizar Producto
   async UpdateProduct() {
       
-    let path = `users/${this.user.uid}/products/${this.product.id}`;
+    let path = `users/EafwGMgiU7gTn8HkjmkcyfyON2p1/products/${this.product.id}`;
 
     const loading = await this.utilsSvc.loading();
     await loading.present();

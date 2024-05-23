@@ -1,3 +1,4 @@
+import { SellUpdateProductComponent } from './../sell-update-product/sell-update-product.component';
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/models/product.model';
@@ -55,8 +56,8 @@ export class AddUpdateProductComponent  implements OnInit {
 
   //Crear producto
   async CreateProduct() {
-    
-      let path = `users/${this.user.uid}/products`;
+      if(this.user.uid == "EafwGMgiU7gTn8HkjmkcyfyON2p1"){
+        let path = `users/${this.user.uid}/products`;
 
       const loading = await this.utilsSvc.loading();
       await loading.present();
@@ -91,6 +92,17 @@ export class AddUpdateProductComponent  implements OnInit {
 
         })
         .finally(() => loading.dismiss());
+      }
+      else{
+        this.utilsSvc.presentToast({
+          message: 'No puedes agregar productos',
+          duration: 1500,
+          position: 'middle',
+          icon: 'alert-circle-outline',
+          color: 'danger'
+        });
+      }
+      
   }
 
   //Actualizar Producto
@@ -133,5 +145,4 @@ export class AddUpdateProductComponent  implements OnInit {
         })
         .finally(() => loading.dismiss());
   }
-
 }
